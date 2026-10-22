@@ -16,7 +16,8 @@ def create_connection():
 def place_order(conn, supplier, item, quantity):
     """Insert a new, not yet received order for a supplier."""
     conn.execute(
-        "INSERT INTO orders (supplier, item, quantity, received) VALUES (?, ?, ?, 0)",
+        "INSERT INTO orders (supplier, item, quantity, received) "
+        "VALUES (?, ?, ?, 0)",
         (supplier, item, quantity),
     )
 
@@ -41,7 +42,10 @@ def cleanup(conn):
 
 def pending_count(conn):
     """Return the number of orders not yet received."""
-    return conn.execute("SELECT COUNT(*) FROM orders WHERE received = 0").fetchone()[0]
+    row = conn.execute(
+        "SELECT COUNT(*) FROM orders WHERE received = 0"
+    ).fetchone()
+    return row[0]
 
 
 def main():
